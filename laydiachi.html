@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+     
+
+    const lat = 10.8447315; // Vĩ độ
+const lon = 106.68177; // Kinh độ
+
+async function getLocationFromCoordinates(lat, lon) {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data && data.display_name) {
+            console.log(data.display_name); // Địa chỉ chi tiết
+        } else {
+            console.log('Không tìm thấy địa chỉ.');
+        }
+    } catch (error) {
+        console.error('Error fetching location:', error);
+    }
+}
+
+getLocationFromCoordinates(lat, lon);
+
+</script>
+</html>

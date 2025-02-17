@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn điểm trên bản đồ</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #address {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Click vào bản đồ để chọn vị trí</h1>
+
+    <div id="map"></div>
+
+    <div id="address">
+        <p><strong>Latitude:</strong> <span id="latitude">Chưa có</span></p>
+        <p><strong>Longitude:</strong> <span id="longitude">Chưa có</span></p>
+        <p><strong>Địa chỉ:</strong> <span id="location">Chưa có</span></p>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Khởi tạo bản đồ với vị trí mặc định
+        const map = L.map('map').setView([10.820451985522737, 106.62776282860474], 12); // Vị trí mặc định ở TP.HCM
+
+        // Thêm lớp bản đồ OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Thêm sự kiện click vào bản đồ
+        map.on('click', function(event) {
+            const latitude = event.latlng.lat;
+            const longitude = event.latlng.lng;
+
+            // Cập nhật Latitude và Longitude trên giao diện
+            document.getElementById('latitude').textContent = latitude;
+            document.getElementById('longitude').textContent = longitude;
+
+            // Sử dụng Reverse Geocoding để lấy địa chỉ từ Latitude và Longitude
+            const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+
+            // Fetch địa chỉ từ Nominatim API
+            fetch(geocodeUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        // Cập nhật địa chỉ vào trang
+                        document.getElementById('location').textContent = data.display_name;
+                    } else {
+                        document.getElementById('location').textContent = "Không tìm thấy địa chỉ cho tọa độ này.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('location').textContent = "Đã xảy ra lỗi khi truy vấn.";
+                });
+        });
+    </script>
+</body>
+</html>

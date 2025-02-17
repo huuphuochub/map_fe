@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản đồ vị trí người dùng</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;  /* Đảm bảo có chiều cao */
+            width: 100%;
+            border: 1px solid black; /* Kiểm tra viền nếu cần */
+        }
+        #coordinates { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Vị trí hiện tại của bạn</h1>
+    <div id="map"></div>
+    <div id="coordinates">
+        <p><strong>Latitude:</strong> <span id="latitude">Đang tải...</span></p>
+        <p><strong>Longitude:</strong> <span id="longitude">Đang tải...</span></p>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map, marker;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                document.getElementById('latitude').textContent = latitude;
+                document.getElementById('longitude').textContent = longitude;
+
+                map = L.map('map').setView([latitude, longitude], 13);
+
+                // Dùng OpenStreetMap để kiểm tra (nếu Stamen lỗi)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors',
+                    maxZoom: 18
+                }).addTo(map);
+
+                marker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup("Bạn đang ở đây!").openPopup();
+
+            }, function(error) {
+                alert("Không thể lấy vị trí của bạn: " + error.message);
+            });
+        } else {
+            alert("Trình duyệt không hỗ trợ Geolocation.");
+        }
+    </script>
+</body>
+</html>
