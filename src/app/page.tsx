@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Testloaction from "./page/test/page";
+// import Testsocket from "@/service/socketio";
+import { SocketProvider } from "@/service/socketio";
+import MapComponent from "./page/home/page";
 
 
 // import { GGetLocation } from "@/service/getlocation";
@@ -19,13 +22,9 @@ export default function Home() {
   //   }
   // })
   return (
-    <div>
-      <Testloaction/>
-      {/* <Formdangki/> */}
-      {/* <Formlogin/> */}
-      {/* <MapComponent /> */}
+    <SocketProvider>
 
-    {/* <TestMapComponent/> */}
-    </div>
+       <MapComponent/>
+    </SocketProvider>
   );
 }

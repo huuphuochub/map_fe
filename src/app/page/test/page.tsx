@@ -32,7 +32,7 @@ export default function Testloaction(){
         if(location && lastlocation ){
           const chenhlech = getDistance(lastlocation.latitude,lastlocation.longitude,latitude,longitude);
 
-          if(chenhlech > 2){
+          if(chenhlech > 10){
             setIsMoving(true);
             // console.log(chenhlech);
             
